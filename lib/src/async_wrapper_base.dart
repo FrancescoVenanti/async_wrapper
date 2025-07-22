@@ -52,6 +52,7 @@ class AsyncWrapper<T> extends StatefulWidget {
   /// Optional callback called when an error is caught.
   final Function(Object?, AsyncCallback<void>)? onError;
 
+  /// Creates an [AsyncWrapper] widget.
   const AsyncWrapper(
       {super.key,
       required this.fetch,
@@ -65,9 +66,10 @@ class AsyncWrapper<T> extends StatefulWidget {
   State<AsyncWrapper<T>> createState() => _AsyncWrapperState<T>();
 }
 
+/// The internal state class for [AsyncWrapper].
 class _AsyncWrapperState<T> extends State<AsyncWrapper<T>> {
   /// Holds the current async operation state (loading, success, error, etc.)
-  AsyncState<T> state = AsyncState.stale();
+  AsyncState<T> state = const AsyncState.stale();
 
   /// Default async trigger function:
   /// - updates internal state to pending
@@ -78,7 +80,7 @@ class _AsyncWrapperState<T> extends State<AsyncWrapper<T>> {
     if (state.isPending && !widget.multipleFetch) return;
     try {
       setState(() {
-        state = AsyncState.pending();
+        state = const AsyncState.pending();
       });
       final res = await widget.fetch();
       setState(() {
@@ -110,28 +112,49 @@ class _AsyncWrapperState<T> extends State<AsyncWrapper<T>> {
 }
 
 /// Describes the lifecycle of an asynchronous operation.
-enum LoadState { stale, pending, success, error }
+enum LoadState {
+  /// The initial state before any operation has been started.
+  stale,
+
+  /// The operation is currently in progress.
+  pending,
+
+  /// The operation completed successfully.
+  success,
+
+  /// The operation failed with an error.
+  error
+}
 
 /// A typed wrapper around async state with optional data and error values.
 class AsyncState<T> {
+  /// The current state of the async operation.
   final LoadState state;
+
+  /// The data returned from a successful operation, if any.
   final T? data;
+
+  /// The error that occurred during the operation, if any.
   final Object? error;
 
+  /// Creates a stale [AsyncState] indicating no operation has started.
   const AsyncState.stale()
       : state = LoadState.stale,
         data = null,
         error = null;
 
+  /// Creates a pending [AsyncState] indicating an operation is in progress.
   const AsyncState.pending()
       : state = LoadState.pending,
         data = null,
         error = null;
 
+  /// Creates a success [AsyncState] with the given [data].
   const AsyncState.success(this.data)
       : state = LoadState.success,
         error = null;
 
+  /// Creates an error [AsyncState] with the given [error].
   const AsyncState.error(this.error)
       : state = LoadState.error,
         data = null;
@@ -142,7 +165,7 @@ class AsyncState<T> {
   /// Returns true if the fetch is ongoing.
   bool get isPending => state == LoadState.pending;
 
-  /// Returns true if fetched succesfully.
+  /// Returns true if fetched successfully.
   bool get isSuccess => state == LoadState.success;
 
   /// Returns true if there was an error while fetching.
