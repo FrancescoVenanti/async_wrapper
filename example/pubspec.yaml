@@ -1,0 +1,17 @@
+name: async_wrapper_example
+description: Example app for async_wrapper package
+publish_to: "none"
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+  flutter: ">=3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  async_wrapper:
+    path: ../
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter

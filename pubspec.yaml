@@ -1,7 +1,5 @@
 name: async_wrapper
-description: >
-  A generic Flutter widget that simplifies managing loading, success, and error
-  states in asynchronous operations with a clean builder pattern.
+description: A lightweight Flutter package for handling async operations with built-in loading, success, and error states.
 version: 1.0.0
 homepage: https://github.com/FrancescoVenanti/async_wrapper
 repository: https://github.com/FrancescoVenanti/async_wrapper

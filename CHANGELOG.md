@@ -1,3 +1,6 @@
-## 0.0.1
+## 1.0.0
 
-* TODO: Describe initial release.
+- Initial release
+- AsyncWrapper widget for handling async operations
+- AsyncState class for state management
+- Support for autorun, multiple fetches, and lifecycle callbacks
