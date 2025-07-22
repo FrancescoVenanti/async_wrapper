@@ -3,8 +3,8 @@ description: >
   A generic Flutter widget that simplifies managing loading, success, and error
   states in asynchronous operations with a clean builder pattern.
 version: 1.0.0
-homepage: https://github.com/francescovenanti/async_wrapper
-repository: https://github.com/francescovenanti/async_wrapper
+homepage: https://github.com/FrancescoVenanti/async_wrapper
+repository: https://github.com/FrancescoVenanti/async_wrapper
 
 topics:
   - async
