@@ -53,14 +53,15 @@ class AsyncWrapper<T> extends StatefulWidget {
   final Function(Object?, AsyncCallback<void>)? onError;
 
   /// Creates an [AsyncWrapper] widget.
-  const AsyncWrapper(
-      {super.key,
-      required this.fetch,
-      required this.builder,
-      this.onSuccess,
-      this.onError,
-      this.autorun = false,
-      this.multipleFetch = false});
+  const AsyncWrapper({
+    super.key,
+    required this.fetch,
+    required this.builder,
+    this.onSuccess,
+    this.onError,
+    this.autorun = false,
+    this.multipleFetch = false,
+  });
 
   @override
   State<AsyncWrapper<T>> createState() => _AsyncWrapperState<T>();
@@ -79,20 +80,19 @@ class _AsyncWrapperState<T> extends State<AsyncWrapper<T>> {
   Future<void> _defaultAsync() async {
     if (state.isPending && !widget.multipleFetch) return;
     try {
-      setState(() {
-        state = const AsyncState.pending();
-      });
+      _changeState(const AsyncState.pending());
       final res = await widget.fetch();
-      setState(() {
-        state = AsyncState.success(res);
-      });
+      _changeState(AsyncState.success(res));
       if (widget.onSuccess != null) widget.onSuccess!(res, _defaultAsync);
     } catch (e) {
-      setState(() {
-        state = AsyncState.error(e);
-      });
+      _changeState(AsyncState.error(e));
       if (widget.onError != null) widget.onError!(e, _defaultAsync);
     }
+  }
+
+  void _changeState(AsyncState<T> newState) {
+    if (!mounted || !context.mounted) return;
+    setState(() => state = newState);
   }
 
   @override
@@ -104,10 +104,7 @@ class _AsyncWrapperState<T> extends State<AsyncWrapper<T>> {
 
   @override
   Widget build(BuildContext context) {
-    return widget.builder(
-      _defaultAsync,
-      state,
-    );
+    return widget.builder(_defaultAsync, state);
   }
 }
 
@@ -123,7 +120,7 @@ enum LoadState {
   success,
 
   /// The operation failed with an error.
-  error
+  error,
 }
 
 /// A typed wrapper around async state with optional data and error values.
@@ -138,26 +135,19 @@ class AsyncState<T> {
   final Object? error;
 
   /// Creates a stale [AsyncState] indicating no operation has started.
-  const AsyncState.stale()
-      : state = LoadState.stale,
-        data = null,
-        error = null;
+  const AsyncState.stale() : state = LoadState.stale, data = null, error = null;
 
   /// Creates a pending [AsyncState] indicating an operation is in progress.
   const AsyncState.pending()
-      : state = LoadState.pending,
-        data = null,
-        error = null;
+    : state = LoadState.pending,
+      data = null,
+      error = null;
 
   /// Creates a success [AsyncState] with the given [data].
-  const AsyncState.success(this.data)
-      : state = LoadState.success,
-        error = null;
+  const AsyncState.success(this.data) : state = LoadState.success, error = null;
 
   /// Creates an error [AsyncState] with the given [error].
-  const AsyncState.error(this.error)
-      : state = LoadState.error,
-        data = null;
+  const AsyncState.error(this.error) : state = LoadState.error, data = null;
 
   /// Returns true if the fetch hasn't started yet.
   bool get stale => state == LoadState.stale;
