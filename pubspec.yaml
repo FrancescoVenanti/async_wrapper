@@ -1,6 +1,6 @@
 name: async_wrapper
 description: A lightweight Flutter package for handling async operations with built-in loading, success, and error states.
-version: 1.0.0
+version: 1.1.0
 homepage: https://github.com/FrancescoVenanti/async_wrapper
 repository: https://github.com/FrancescoVenanti/async_wrapper
 

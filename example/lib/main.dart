@@ -39,9 +39,9 @@ class AsyncWrapperExample extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: const Text('AsyncWrapper Example')),
       body: Center(
-        child: AsyncWrapper<String>(
-          fetch: _fetchData,
-          builder: (trigger, state) {
+        child: AsyncWrapper<String>.future(
+          future: _fetchData,
+          builder: (state, controller) {
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -55,7 +55,7 @@ class AsyncWrapperExample extends StatelessWidget {
                       style: const TextStyle(color: Colors.green)),
                 const SizedBox(height: 20),
                 ElevatedButton(
-                  onPressed: state.isPending ? null : trigger,
+                  onPressed: state.isPending ? null : controller.fetch,
                   child: const Text('Fetch Data'),
                 ),
               ],
